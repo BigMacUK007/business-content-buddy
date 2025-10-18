@@ -1,0 +1,48 @@
+# syntax=docker/dockerfile:1
+# Development Dockerfile for Business Content Buddy
+
+ARG RUBY_VERSION=3.3.0
+FROM ruby:$RUBY_VERSION-slim
+
+# Install dependencies
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y \
+    build-essential \
+    curl \
+    git \
+    libpq-dev \
+    libvips \
+    nodejs \
+    npm \
+    postgresql-client \
+    redis-tools \
+    vim \
+    && rm -rf /var/lib/apt/lists /var/cache/apt/archives
+
+# Install Node.js 18.x
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+    apt-get install -y nodejs && \
+    npm install -g yarn
+
+# Set working directory
+WORKDIR /rails
+
+# Install gems
+COPY Gemfile Gemfile.lock ./
+RUN bundle install
+
+# Copy application code
+COPY . .
+
+# Precompile bootsnap for faster boot times
+RUN bundle exec bootsnap precompile --gemfile app/ lib/
+
+# Create necessary directories
+RUN mkdir -p tmp/pids
+
+# Expose port
+EXPOSE 3000
+
+# Start server
+CMD ["bash", "-c", "rm -f tmp/pids/server.pid && bundle exec rails server -b 0.0.0.0"]
+

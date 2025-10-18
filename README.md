@@ -57,6 +57,41 @@ Business Content Buddy is a Rails 8 application that helps founders, consultants
 
 ### Local Setup
 
+#### Option 1: Docker (Recommended)
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/BigMacUK007/business-content-buddy.git
+   cd business-content-buddy
+   ```
+
+2. Copy environment file:
+   ```bash
+   cp .env.example .env
+   # Edit .env and add your RAILS_MASTER_KEY
+   ```
+
+3. Start with Docker Compose:
+   ```bash
+   docker-compose up --build
+   ```
+
+4. Set up the database (in another terminal):
+   ```bash
+   docker-compose exec web rails db:create db:migrate
+   ```
+
+5. Visit `http://localhost:3000`
+
+**Or use the Makefile:**
+```bash
+make setup  # Complete setup in one command
+```
+
+See [DOCKER_SETUP.md](DOCKER_SETUP.md) for detailed Docker instructions.
+
+#### Option 2: Local Installation
+
 1. Clone the repository:
    ```bash
    git clone https://github.com/BigMacUK007/business-content-buddy.git
@@ -80,6 +115,8 @@ Business Content Buddy is a Rails 8 application that helps founders, consultants
    ```
 
 5. Visit `http://localhost:3000`
+
+See [SETUP_GUIDE.md](SETUP_GUIDE.md) for detailed local setup instructions.
 
 ### Environment Variables
 
